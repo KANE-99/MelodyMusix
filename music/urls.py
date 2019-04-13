@@ -1,0 +1,15 @@
+from django.urls import path
+from .views import IndexView,DetailView,AlbumCreate,AlbumUpdate,AlbumDelete,UserFormView,SongList,SongDetail
+from django.contrib.auth import views as auth_views
+
+app_name = 'music'
+
+urlpatterns = [
+    path('', IndexView.as_view(), name = "index" ),
+    path('<int:pk>', DetailView.as_view() , name = "detail"),
+    path('album/add',AlbumCreate.as_view(),name = "album-add"),
+    path('album/<int:pk>',AlbumUpdate.as_view(),name = "album-update"),
+    path('album/<int:pk>/delete',AlbumDelete.as_view(),name = "album-delete"),
+    path('songs', SongList.as_view(), name= "songs"),
+    path('song/<int:pk>', SongDetail.as_view(), name= "song-detail"),
+] 

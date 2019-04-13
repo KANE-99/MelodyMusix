@@ -1,0 +1,13 @@
+{% extends 'music/base.html' %}
+{% block title %}Add new Title{% endblock %} 
+{% block body %}
+    <form action="" method='post' enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include 'music/form-template.html' %}
+        <br>
+        <button type='submit' class='btn btn-success'>
+            Submit
+        </button>
+
+    </form>
+{% endblock %}  

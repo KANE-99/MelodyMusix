@@ -1,0 +1,27 @@
+{% extends 'music/base.html' %}
+
+{% block body %}
+
+<h1>This is The list of Songs: </h1>
+<ul>
+    {% for a in song_list %}
+    <h3>
+        <li><a href="#">{{ a.song_title }}</a>
+        <form method="post" style="display: inline">
+            {% csrf_token %}
+            <input type="hidden" value="{{ a.id }}">
+            <button type="submit" class="btn btn-default btn-sm">
+                <span class="fa fa-trash">
+
+                </span>
+
+            </button>
+
+        </form>
+    </li>
+    </h3>
+
+    {% endfor %}
+</ul>
+
+{% endblock %}

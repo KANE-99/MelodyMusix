@@ -1,0 +1,22 @@
+body{
+    background: white url("images/newbg.jpg");
+    margin-bottom: 90px;
+}  
+ .navbar-brand {
+    font-family: 'Satisfy', cursive; 
+} 
+
+.bgcol {
+    background-color: #5CDB95;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    height: 90px;
+}
+.song-cover {
+    max-width: 100px;
+    height: 80px;
+    margin-right: 5%;
+}
