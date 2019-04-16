@@ -10,7 +10,7 @@ urlpatterns = [
     path('album/add',AlbumCreate.as_view(),name = "album-add"),
     path('album/<int:pk>',AlbumUpdate.as_view(),name = "album-update"),
     path('album/<int:pk>/delete',AlbumDelete.as_view(),name = "album-delete"),
-    path('songs', SongList.as_view(), name= "songs"),
+    path('songs', SongList.as_view(), name= "song-list"),
     path('song/<int:pk>', SongDetail.as_view(), name= "song-detail"),
     
 ] 
