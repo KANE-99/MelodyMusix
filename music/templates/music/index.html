@@ -2,26 +2,52 @@
 
 {% block body %}
 
-<h1>This is The list of Albums: </h1>
-<ul>
-    {% for a in album_list %}
-    <h3>
-        <li><a href="{% url 'music:detail' a.id %}">{{ a.album_title }}</a>
-        <form method="post" action="{% url 'music:album-delete' a.id %}" style="display: inline">
-            {% csrf_token %}
-            <input type="hidden" value="{{ a.id }}">
-            <button type="submit" class="btn btn-default btn-sm">
-                <span class="fa fa-trash">
+<!-- 
+<h2 class="jumbotron">Recent Albums:</h2> -->
+      
+<div class="container album-page">
 
-                </span>
+    <ul>
+        <div class="row">
+            {% for a in album_list %}
+            <div class="col-sm-4">
 
-            </button>
+                <div class="card " style="width: 18rem;">
+                    <div class="view overlay rounded-top rounded-bottom">
+                        <img class="card-img-top" src="{{ a.album_logo.url }}" alt="Card image cap">
+                        <a href="{% url 'music:detail' a.id %}">
+                            <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
 
-        </form>
-    </li>
-    </h3>
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{% url 'music:detail' a.id %}">{{ a.album_title }}</a></h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk
+                            of
+                            the
+                            card's content.</p>
+                        <form method="post" action="{% url 'music:album-delete' a.id %}" style="display: inline">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ a.id }}">
+                            <button type="submit" class="btn btn-dark btn-sm">
+                                <span class="fa fa-trash">
 
-    {% endfor %}
-</ul>
+                                </span>
+
+                            </button>
+
+                        </form>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            {% endfor %}
+        </div>
+    </ul>
+
+</div>
 
 {% endblock %}

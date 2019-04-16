@@ -6,6 +6,15 @@
 
 </head>
 {% block body %}
+<div class="container">
+    <div class="jumbotron" style="background: #1A2980;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to bottom, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to bottom, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            ">
+
+    </div>
+    <img class="thumbnail" src="{{ album.album_logo.url }}" style="margin-top: -90px; margin-left: 90px;" alt="">
+</div>
 <img src="{{ album.album_logo.url }}" alt="Image cannot be shown">
 <h1> {{ album.album_title }} </h1>
 <br>
@@ -20,6 +29,10 @@
 {% endfor %}
 
 
+
+
+
+
 <footer class="fixed-bottom bgcol">
     <div class="container">
         <div class="row d-flex align-items-center">
@@ -30,19 +43,23 @@
             </div>
 
             <div class="col-md-4 ">
-                <button type="button" id="backward" class="btn btn-default peach-gradient .btn-sm" aria-label="Backward" onclick="backwardPlay()">
+                <button type="button" id="backward" class="btn btn-default peach-gradient .btn-sm" aria-label="Backward"
+                    onclick="backwardPlay()">
                     <span aria-hidden="true"><i class="fas fa-step-backward fa-2x"></i></span>
                 </button>
-                <button type="button" id="play-or-pause" class="btn btn-default peach-gradient .btn-sm" aria-label="Play Music" onclick="togglePlay()"> 
+                <button type="button" id="play-or-pause" class="btn btn-default peach-gradient .btn-sm"
+                    aria-label="Play Music" onclick="togglePlay()">
                     <span aria-hidden="true"><i id="play-or-pause-icon" class="fas fa-play-circle fa-2x"></i></span>
                 </button>
-                <button type="button" id="forward" class="btn btn-default peach-gradient .btn-sm" aria-label="Forward" onclick="forwardPlay()">
+                <button type="button" id="forward" class="btn btn-default peach-gradient .btn-sm" aria-label="Forward"
+                    onclick="forwardPlay()">
                     <span aria-hidden="true"><i class="fas fa-step-forward fa-2x"></i></span>
                 </button>
 
             </div>
             <div class="col-md-6 " id="audio-player">
-                <audio id="player" preload="auto" ontimeupdate="initProgressBar()" type="audio/mp3" src="{{ album.song_set.all.first.upload.url }}">
+                <audio id="player" preload="auto" ontimeupdate="initProgressBar()" type="audio/mp3"
+                    src="{{ album.song_set.all.first.upload.url }}">
                 </audio>
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" id="seekObj"
