@@ -37,7 +37,11 @@
 
 
 <div class="container" style="margin-top: 66.5px;">
+    {% if 'search' not in request.path %}
     <h2 style="color:white;">All Songs: </h2>
+    {% else %}
+    <h2 style="color:white;">Search Result: </h2>
+    {% endif %}
     <div class="container" style="padding-bottom:50px;">
         <ul class="list-group list-group-flush">
             {% for song in song_list %}

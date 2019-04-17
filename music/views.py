@@ -7,7 +7,9 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.db.models import Q
+import operator
+from functools import reduce
 
 def signup(request):
     if request.method == 'POST':
@@ -29,6 +31,23 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     paginate_by = 9
     def get_queryset(self):
         return Album.objects.all()
+
+class AlbumSearch(IndexView, LoginRequiredMixin):
+    paginate_by = 9
+    def get_queryset(self):
+        result = super().get_queryset()
+
+        query = self.request.GET.get('q')
+        if query:
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(album_title__icontains=q) for q in query_list)) |
+                reduce(operator.and_,
+                       (Q(artist__icontains=q) for q in query_list))
+            )
+
+        return result
 
 class DetailView(LoginRequiredMixin, generic.DetailView):
     model = Album
@@ -53,6 +72,24 @@ class SongList(LoginRequiredMixin, generic.ListView):
     context_object_name = 'song_list'
     template_name = 'music/songlist.html'
     paginate_by = 10
+
+class SongSearch(SongList, LoginRequiredMixin):
+    paginate_by = 10
+    def get_queryset(self):
+        result = super().get_queryset()
+
+        query = self.request.GET.get('q')
+        if query:
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(album__album_title__icontains=q) for q in query_list)) |
+                reduce(operator.and_,
+                       (Q(song_title__icontains=q) for q in query_list))
+            )
+
+        return result
+
 
 
 class SongDetail(LoginRequiredMixin, generic.DetailView):

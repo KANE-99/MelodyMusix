@@ -12,7 +12,7 @@ body{
     margin-top: 67px;
 }
 .bgcol {
-    background-color: #5CDB95;
+    background-color: rgba(0, 0, 0, 0.8);
 }
 .jumbotron {
     padding:10px;

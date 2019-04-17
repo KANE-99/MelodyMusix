@@ -1,15 +1,14 @@
 
 
-<table>
 {% for field in form %}
-    <div>
-        
-            <tr>
-                <td><label> {{ field.label_tag }} </label></td>
-                <td><span> {{ field }} </span></td>
-            </tr>
-       
-    
+<div>
+    <div class="container">
+        <div class="row">
+            <label style="padding-right:10px;"> {{ field.label_tag }} </label></td>
+            <span> {{ field }} </span></td>
+        </div>
     </div>
+
+
+</div>
 {% endfor %}
-</table>
