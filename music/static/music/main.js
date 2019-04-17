@@ -159,4 +159,11 @@ function forwardPlay() {
     }
 }
 
+$("span button").click(function() {
+    current_playing_number = this.id; 
+    player.src = songs[current_playing_number].upload;
+    player.load();
+    player.play();
+    $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
+});
 initPlayers();
