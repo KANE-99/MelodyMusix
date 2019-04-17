@@ -3,25 +3,32 @@
 {% block body %}
 
 <h1>This is The list of Songs: </h1>
-<ul>
-    {% for a in song_list %}
-    <h3>
-        <li><a href="#">{{ a.song_title }}</a>
-        <form method="post" style="display: inline">
-            {% csrf_token %}
-            <input type="hidden" value="{{ a.id }}">
-            <button type="submit" class="btn btn-default btn-sm">
-                <span class="fa fa-trash">
+<div class="container">
+    <ul class="list-group list-group-flush">
+        {% for song in song_list %}
+        <li class="list-group-item">
+            <span style="display:flex; align-items: center;">
+                <button class="btn btn-sm" id="{{ forloop.counter0 }}">
+                    <i class="far fa-play-circle fa-3x text-muted" style="padding-right: 4px;"></i>
+                </button>
+                <span class="move"><a href="#">{{ song.song_title }}</a></span>
+                <span class="text-muted" style="margin-left:auto;">{{ song.duration }}</span>
+                <form method="post" style="margin-left:auto;">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ a.id }}">
+                    <button type="submit" class="btn btn-default btn-sm">
+                        <span class="fa fa-trash"> </span>
+                    </button>
+                </form>                
+            </span>
 
-                </span>
+        </li>
+        {% if song.is_favourite %}
+        <img src="http://icons.iconarchive.com/icons/fasticon/web-2/16/Favorite-icon.png" />
+        {% endif %}<br>
+        {% endfor %}
+    </ul>
+</div>
 
-            </button>
-
-        </form>
-    </li>
-    </h3>
-
-    {% endfor %}
-</ul>
 
 {% endblock %}
