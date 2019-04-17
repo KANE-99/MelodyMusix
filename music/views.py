@@ -26,12 +26,14 @@ def signup(request):
 class IndexView(LoginRequiredMixin, generic.ListView):
     template_name = 'music/index.html'
     context_object_name = 'album_list'
+    paginate_by = 9
     def get_queryset(self):
         return Album.objects.all()
 
 class DetailView(LoginRequiredMixin, generic.DetailView):
     model = Album
     template_name = 'music/detail.html'
+   
 
 class AlbumCreate(LoginRequiredMixin, CreateView):
     model = Album
@@ -50,6 +52,7 @@ class SongList(LoginRequiredMixin, generic.ListView):
     model = Song
     context_object_name = 'song_list'
     template_name = 'music/songlist.html'
+    paginate_by = 10
 
 
 class SongDetail(LoginRequiredMixin, generic.DetailView):

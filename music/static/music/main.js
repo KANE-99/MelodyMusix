@@ -2,10 +2,14 @@
 let current_playing_number = 0;
 function calculateTotalValue(length) {
     var minutes = Math.floor(length / 60),
-        seconds_int = length - minutes * 60,
-        seconds_str = seconds_int.toString(),
-        seconds = seconds_str.substr(0, 2),
-        time = minutes + ':' + seconds
+        seconds_int = length - minutes * 60;
+    if (seconds_int >= 10) {
+        seconds_str = seconds_int.toString();
+    } else {
+        seconds_str = '0' + seconds_int.toString();
+    }
+    seconds = seconds_str.substr(0, 2);
+    time = minutes + ':' + seconds;
 
     return time;
 }
@@ -37,6 +41,7 @@ function initProgressBar() {
     let current_time = player.currentTime;
 
     // calculate total length of value
+    console.log(length)
     var totalLength = calculateTotalValue(length)
     jQuery(".end-time").html(totalLength);
 
@@ -64,6 +69,7 @@ $('.progress').click(
         // player.currentTime = (widthclicked / totalWidth) * dura;
         console.log("kkk:" + player.currentTime);
         player.play();
+        $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
         newprogress = (player.currentTime / dura) * 100;
         console.log(newprogress);
         $('#seekObj').attr('aria-valuenow', newprogress).css('width', newprogress + '%');
@@ -79,6 +85,11 @@ function togglePlay() {
 
 
     } else {
+        if (player.readyState === 0) {
+            player.src = songs[current_playing_number].upload;
+            player.load();
+        }
+
         player.play();
         $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
         isPlaying = true;
@@ -100,7 +111,7 @@ function backwardPlay() {
         var parent = document.getElementById("audio-player");
         var child = document.getElementById('player');
         child.pause();
-        child.currentTime = 0;        
+        child.currentTime = 0;
         var player = document.createElement('audio');
         player.id = 'player';
         player.src = songs[current_playing_number].upload;
@@ -131,8 +142,8 @@ function forwardPlay() {
         if (current_playing_number == last) {
             forwardBtn.disabled = true;
         }
-        
-        
+
+
         var parent = document.getElementById("audio-player");
         var child = document.getElementById('player');
         child.pause();
@@ -159,8 +170,8 @@ function forwardPlay() {
     }
 }
 
-$("span button").click(function() {
-    current_playing_number = this.id; 
+$("span button").click(function () {
+    current_playing_number = this.id;
     player.src = songs[current_playing_number].upload;
     player.load();
     player.play();

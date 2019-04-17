@@ -94,7 +94,7 @@
         src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.6/js/mdb.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('li.active').removeClass('active');
+            $('li[class="nav-item active"]').removeClass('active');
             $('a[href="' + location.pathname + '"]').closest('li').addClass('active');
         });
 
