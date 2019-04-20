@@ -1,6 +1,8 @@
 {% extends 'music/base.html' %}
 {% block title %}Add new Title{% endblock %} 
 {% block body %}
+<div class="container" style="margin-top:66.6px; color:white;">
+    <h3>Add Album:</h3>
     <form action="" method='post' enctype="multipart/form-data">
         {% csrf_token %}
         {% include 'music/form-template.html' %}
@@ -10,4 +12,6 @@
         </button>
 
     </form>
+</div>
+   
 {% endblock %}  
