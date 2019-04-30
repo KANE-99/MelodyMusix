@@ -29,7 +29,6 @@ function initPlayers() {
     // Variables
     // ----------------------------------------------------------
     // audio embed object
-    player = document.getElementById('player');
     playBtn = document.getElementById('play-or-pause');
     forwardBtn = document.getElementById('forward');
     backwardBtn = document.getElementById('backward');
@@ -40,8 +39,6 @@ function initProgressBar() {
     let length = player.duration;
     let current_time = player.currentTime;
 
-    // calculate total length of value
-    console.log(length)
     var totalLength = calculateTotalValue(length)
     jQuery(".end-time").html(totalLength);
 
@@ -97,6 +94,21 @@ function togglePlay() {
 
     }
 }
+var playfunc = function playing() {
+    current_playing_number = this.id;
+    player.src = songs[current_playing_number].upload;
+    player.load();
+    player.play();
+    $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
+    song_title = document.getElementById('song-title');
+    song_title.textContent = this.closest('span').childNodes[3].textContent;
+    if (location.pathname.includes('songs')) {
+        var image = document.getElementById('song-img');
+        image.src = songs[current_playing_number].album_logo;
+    }
+
+}
+$("span button").click(playfunc);
 function backwardPlay() {
 
     if (current_playing_number > 0) {
@@ -108,23 +120,38 @@ function backwardPlay() {
             backwardBtn.disabled = true;
 
         }
-        var parent = document.getElementById("audio-player");
-        var child = document.getElementById('player');
-        child.pause();
-        child.currentTime = 0;
-        var player = document.createElement('audio');
-        player.id = 'player';
-        player.src = songs[current_playing_number].upload;
-        player.type = 'audio/mpeg';
-        player.preload = 'auto';
-        player.ontimeupdate = function () { initProgressBar(); };
-        parent.removeChild(child);
-        parent.appendChild(player);
-        player.load();
-        player.onloadeddata = function () {
+        player = document.getElementById('player');
+        if (location.pathname.includes('songs')) {
+            player.src = songs[current_playing_number].upload;
+            player.load();
             player.play();
             $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
-        };
+            song_title = document.getElementById('song-title');
+            song_title.textContent = songs[current_playing_number].title;
+            var image = document.getElementById('song-img');
+            image.src = songs[current_playing_number].album_logo;
+
+        } else {
+            var parent = document.getElementById("audio-player");
+            var child = document.getElementById('player');
+            child.pause();
+            child.currentTime = 0;
+            var player = document.createElement('audio');
+            player.id = 'player';
+            player.src = songs[current_playing_number].upload;
+            player.type = 'audio/mpeg';
+            player.preload = 'auto';
+            player.ontimeupdate = function () { initProgressBar(); };
+            parent.removeChild(child);
+            parent.appendChild(player);
+            player.load();
+            player.onloadeddata = function () {
+                player.play();
+                $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
+            };
+            song_title = document.getElementById('song-title');
+            song_title.textContent = songs[current_playing_number].title;
+        }
     } else {
         player.currentTime = 0;
         $('#seekObj').attr('aria-valuenow', 0).css('width', 0 + '%');
@@ -142,39 +169,45 @@ function forwardPlay() {
         if (current_playing_number == last) {
             forwardBtn.disabled = true;
         }
-
-
-        var parent = document.getElementById("audio-player");
-        var child = document.getElementById('player');
-        child.pause();
-        child.currentTime = 0;
-        var player = document.createElement('audio');
-        player.id = 'player';
-        player.src = songs[current_playing_number].upload;
-        player.type = 'audio/mpeg';
-        player.preload = 'auto';
-        player.ontimeupdate = function () { initProgressBar(); };
-        parent.removeChild(child);
-        parent.appendChild(player);
-        // player.pause();
-        // player.setAttribute('src', songs[current_playing_number].upload);
-        player.load();
-        player.onloadeddata = function () {
+        player = document.getElementById('player');
+        if (location.pathname.includes('songs')) {
+            player.src = songs[current_playing_number].upload;
+            player.load();
             player.play();
             $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
-        }
+            song_title = document.getElementById('song-title');
+            song_title.textContent = songs[current_playing_number].title;
+            var image = document.getElementById('song-img');
+            image.src = songs[current_playing_number].album_logo;
 
+        } else {
+            var parent = document.getElementById("audio-player");
+            var child = document.getElementById('player');
+            child.pause();
+            child.currentTime = 0;
+            var player = document.createElement('audio');
+            player.id = 'player';
+            player.src = songs[current_playing_number].upload;
+            song_title = document.getElementById('song-title');
+            song_title.textContent = songs[current_playing_number].title;
+            player.type = 'audio/mpeg';
+            player.preload = 'auto';
+            player.ontimeupdate = function () { initProgressBar(); };
+            parent.removeChild(child);
+            parent.appendChild(player);
+            // player.pause();
+            // player.setAttribute('src', songs[current_playing_number].upload);
+            player.load();
+            player.onloadeddata = function () {
+                player.play();
+                $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
+            }
+        }
     } else {
         player.currentTime = 0;
         $('#seekObj').attr('aria-valuenow', 0).css('width', 0 + '%');
     }
 }
 
-$("span button").click(function () {
-    current_playing_number = this.id;
-    player.src = songs[current_playing_number].upload;
-    player.load();
-    player.play();
-    $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
-});
+
 initPlayers();

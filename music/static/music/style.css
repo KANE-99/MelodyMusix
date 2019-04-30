@@ -64,3 +64,10 @@ footer {
     /* Opera */
 
 }
+.progress-bar-animated {
+ -webkit-animation: progress-bar-stripes 1s linear infinite;
+ animation: progress-bar-stripes 1s linear infinite;
+}
+.progress-bar {
+    transition: width .6s ease;
+}

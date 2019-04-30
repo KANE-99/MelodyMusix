@@ -19,7 +19,8 @@
             {% endif %}
             {% for i in paginator.page_range %}
             {% if page_obj.number == i %}
-            <li class="page-item active"><a class="page-link"><span>{{ i }} <span class="sr-only">(current)</span></span></a></li>
+            <li class="page-item active"><a class="page-link"><span>{{ i }} <span
+                            class="sr-only">(current)</span></span></a></li>
             {% else %}
             <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
             {% endif %}
@@ -53,22 +54,22 @@
                     <span class="move"><a href="#" style="color:inherit;">{{ song.song_title }}</a></span>
                     <span style=" margin-left: auto; display: flex; align-items: center;">
                         <span class="text-muted float-left" style="margin-right:8px;">{{ song.duration }}</span>
-                        <form method="post" class="float-right">
+                        <!-- <form method="post" class="float-right">
                             {% csrf_token %}
                             <input type="hidden" value="{{ a.id }}">
                             <button type="submit" class="btn btn-default btn-sm">
                                 <span class="fa fa-trash"> </span>
                             </button>
-                        </form>
+                        </form> -->
                     </span>
 
                 </span>
-
+                {% if song.is_favourite %}
+                <img src="http://icons.iconarchive.com/icons/fasticon/web-2/16/Favorite-icon.png" />
+                {% endif %}
+                {% endfor %}
             </li>
-            {% if song.is_favourite %}
-            <img src="http://icons.iconarchive.com/icons/fasticon/web-2/16/Favorite-icon.png" />
-            {% endif %}<br>
-            {% endfor %}
+
         </ul>
     </div>
 </div>
@@ -78,10 +79,12 @@
 <footer class="fixed-bottom bgcol">
     <div class="container">
         <div class="row d-flex align-items-center">
-            <div class="col-md-2">
-                <img class="song-cover img-fluid rounded float-left"
-                    src="{{ song.album.album_logo.url }}"
+            <div class="col-md-1">
+                <img class="song-cover img-fluid rounded float-left" style="padding-right: 5px;" src="" id="song-img"
                     alt="">
+            </div>
+            <div class="col-md-2 align-items-top" style="color:white;">
+                <a href="#" id="song-title" style="color:inherit;">{{ song_list.all | first }}</a>
             </div>
 
             <div class="col-md-4 ">
@@ -99,9 +102,8 @@
                 </button>
 
             </div>
-            <div class="col-md-6 " id="audio-player" style="color:white;">
-                <audio id="player" preload="auto" ontimeupdate="initProgressBar()" type="audio/mp3"
-                    src="{{ album.song_set.all.first.upload.url }}">
+            <div class="col-md-5 " id="audio-player" style="color:white;">
+                <audio id="player" preload="auto" ontimeupdate="initProgressBar()" type="audio/mp3" src="">
                 </audio>
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" id="seekObj"
@@ -122,10 +124,16 @@
         {% for song in song_list %}
     {% if not forloop.first %}, {% endif %}
     {
-        upload: "{{ song.upload.url }}"
+        upload: "{{ song.upload.url }}",
+        album_logo: "{{ song.album.album_logo.url }}" ,
+        title: "{{ song.song_title }}"
     }
     {% endfor %}
     ];
+    var player = document.getElementById('player');
+    player.src = songs[0].upload;
+    var image = document.getElementById('song-img');
+    image.src = songs[0].album_logo;
 
 </script>
 {% endblock %}

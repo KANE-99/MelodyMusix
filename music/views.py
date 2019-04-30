@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.views import generic
 from .models import Album, Song
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -52,6 +53,7 @@ class AlbumSearch(IndexView, LoginRequiredMixin):
 class DetailView(LoginRequiredMixin, generic.DetailView):
     model = Album
     template_name = 'music/detail.html'
+
    
 
 class AlbumCreate(LoginRequiredMixin, CreateView):

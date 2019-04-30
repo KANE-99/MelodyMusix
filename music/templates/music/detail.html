@@ -39,12 +39,12 @@
                     <span class="move">{{ song.song_title }}</span>
                     <span class="text-muted" style="margin-left:auto;">{{ song.duration }}</span>
                 </span>
-
+                {% if song.is_favourite %}
+                <img src="http://icons.iconarchive.com/icons/fasticon/web-2/16/Favorite-icon.png" />
+                {% endif %}
+                {% endfor %}
             </li>
-            {% if song.is_favourite %}
-            <img src="http://icons.iconarchive.com/icons/fasticon/web-2/16/Favorite-icon.png" />
-            {% endif %}<br>
-            {% endfor %}
+
         </ul>
 
     </div>
@@ -54,10 +54,12 @@
 <footer class="fixed-bottom bgcol">
     <div class="container">
         <div class="row d-flex align-items-center">
-            <div class="col-md-2">
-                <img class="song-cover img-fluid rounded float-left"
-                    src="{{ album.album_logo.url }}"
-                    alt="">
+            <div class="col-md-1">
+                <img class="song-cover img-fluid rounded float-left" src="{{ album.album_logo.url }}" alt="">
+            </div>
+
+            <div class="col-md-2 align-items-top" style="color:white;">
+                <a href="#" id="song-title" style="color:inherit;">{{ album.song_set.all | first }}</a>
             </div>
 
             <div class="col-md-4 ">
@@ -75,7 +77,7 @@
                 </button>
 
             </div>
-            <div class="col-md-6 " id="audio-player" style="color:white;">
+            <div class="col-md-5 " id="audio-player" style="color:white;">
                 <audio id="player" preload="auto" ontimeupdate="initProgressBar()" type="audio/mp3"
                     src="{{ album.song_set.all.first.upload.url }}">
                 </audio>
@@ -99,7 +101,8 @@
         {% for song in album.song_set.all %}
     {% if not forloop.first %}, {% endif %}
     {
-        upload: "{{ song.upload.url }}"
+        upload: "{{ song.upload.url }}",
+        title: "{{ song.song_title }}"
     }
     {% endfor %}
     ];
