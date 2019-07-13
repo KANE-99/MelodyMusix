@@ -8,7 +8,7 @@ from music import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('music/',include('music.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('django.contrib.auth.urls'),name='login'),
     path('accounts/signup/', views.signup, name="signup" )
 ]
 

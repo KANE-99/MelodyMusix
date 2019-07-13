@@ -49,7 +49,13 @@
 
     </div>
 </div>
-
+<div class="container">
+    {% if album.song_set.all.first.file_type == 'mp4' %}
+    <video id="player" preload="auto" ontimeupdate="initProgressBar()" type="audio/mp3"
+                    src="{{ album.song_set.all.first.upload.url }}" controls>
+    </video>
+    {% endif %}
+</div>
 
 <footer class="fixed-bottom bgcol">
     <div class="container">

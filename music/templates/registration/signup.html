@@ -1,17 +1,19 @@
 {% extends 'music/base.html' %}
 {% block title %}Register{% endblock %} 
 {% block body %}
-<div class="container" style="background: white; margin-top: 66.5px;">
+<div class="container" style="background: white; margin-top: 66.5px;padding-top: 15px;padding-bottom: 15px;">
 
-    <h2>Create a New Account</h2><br>
-    <form action="" method='post' enctype="multipart/form-data">
+    <h2 style="padding-top:20px;">Create a New Account</h2><br>
+    <form action="" method='post' enctype="multipart/form-data" >
         {% csrf_token %}
         {% include 'music/form-template.html' %}
         <br>
-        <button type='submit' class='btn btn-success'>
+        <button type='submit' class='btn btn-success' >
             Submit
         </button>
-
+        <a href="{% url 'login' %}" style="padding-top:20px;">
+            Already Existing User? Then click here to login
+        </a>
     </form>
 </div>
 
