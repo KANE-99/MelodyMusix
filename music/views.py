@@ -3,27 +3,30 @@ from django.views import generic
 from .models import Album, Song
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
+from .forms import CustomUserCreationForm
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 import operator
 from functools import reduce
 
+
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
+            # username = form.cleaned_data.get('username')
+            # raw_password = form.cleaned_data.get('password')
+            # user = authenticate(username=username, password=raw_password)
+            # login(request, user)
+            messages.success(request, 'Account created successfully')
             return redirect('music:index')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
 
 class IndexView(LoginRequiredMixin, generic.ListView):
@@ -53,7 +56,7 @@ class AlbumSearch(IndexView, LoginRequiredMixin):
 class DetailView(LoginRequiredMixin, generic.DetailView):
     model = Album
     template_name = 'music/detail.html'
-
+ 
    
 
 class AlbumCreate(LoginRequiredMixin, CreateView):
@@ -66,8 +69,19 @@ class AlbumUpdate(LoginRequiredMixin, UpdateView):
 
 class AlbumDelete(LoginRequiredMixin, DeleteView):
     model = Album
-    success_url = reverse_lazy('music:index')
+    success_url = reverse_lazy('music:index')   
 
+class SongCreate(LoginRequiredMixin, CreateView):
+    model = Song
+    fields = '__all__'
+
+class SongUpdate(LoginRequiredMixin, UpdateView):
+    model = Song
+    fields = '__all__'
+
+class SongDelete(LoginRequiredMixin, DeleteView):
+    model = Song
+    success_url = reverse_lazy('music:index')   
 
 class SongList(LoginRequiredMixin, generic.ListView):
     model = Song
@@ -84,8 +98,8 @@ class SongSearch(SongList, LoginRequiredMixin):
         if query:
             query_list = query.split()
             result = result.filter(
-                reduce(operator.and_,
-                       (Q(album__album_title__icontains=q) for q in query_list)) |
+                # reduce(operator.and_,
+                #        (Q(album__album_title__icontains=q) for q in query_list)) |
                 reduce(operator.and_,
                        (Q(song_title__icontains=q) for q in query_list))
             )

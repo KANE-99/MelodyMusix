@@ -23,7 +23,6 @@ class Song(models.Model):
     album = models.ForeignKey(Album,on_delete = models.CASCADE)
     file_type = models.CharField(max_length=10)
     song_title = models.CharField(max_length=250)
-    is_favourite = models.BooleanField(default = False)
     upload = models.FileField(upload_to=user_directory_path)
     duration = models.CharField(max_length=10, default="00:00")
     

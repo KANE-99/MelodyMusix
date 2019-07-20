@@ -32,18 +32,18 @@
             </button>
             <div class="collapse navbar-collapse" id="topNavBar">
                 <ul class="navbar-nav mr-auto d-flex align-items-center">
-                    <li class="nav-item active">
+                    <li class="nav-item {% if 'song' not in request.path %}active{% endif %}">
                         <a class="nav-link" href="{% url 'music:index' %}">
                             <span><i class="fas fa-compact-disc"></i></span>&nbsp;Album
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {% if 'song' in request.path %}active{% endif %}">
                         <a class="nav-link" href="{% url 'music:song-list' %}">
                             <span class="fa fa-music"></span>&nbsp;Song
                         </a>
                     </li>
                 </ul>
-                {% if '/songs' in request.path %}
+                {% if '/songs'  in request.path or '/song' in request.path %}
                 <form class="form-inline justify-content-center" role="search" method="GET"
                     action="{% url 'music:song-list-view'  %}">
                     {% else %}
@@ -59,26 +59,39 @@
                         </div>
                     </form>
                     <ul class="navbar-nav justify-content-md-end d-flex align-items-center">
+                        {% if '/songs' in request.path or '/song' in request.path %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'music:song-add' %}">
+                                <i class="fas fa-plus"></i>&nbsp;Add Song
+                            </a>
+
+                        </li>
+                        {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'music:album-add' %}">
-                                &nbsp;&nbsp;<span class="fas fa-plus"></span>&nbsp;Add Album
+                                <i class="fas fa-plus"></i>&nbsp;Add Album
                             </a>
                         </li>
+                        {% endif %}
                         <li class="nav-item">
                             {% if user.is_authenticated %}
                             <a class="nav-link" href="{% url 'logout' %}">
-                                &nbsp;&nbsp;<span class="fas fa-power-off"></span>&nbsp;Logout
+                                <i class="fas fa-power-off"></i>&nbsp;Logout
                             </a>
                             {% else %}
-                            <a class="nav-link" href="{% url 'signup' %}">
-                                &nbsp;&nbsp;<span class="fas fa-user-plus"></span>&nbsp;SignUp
+                            <a class="nav-link" href="{% url 'login' %}">
+                                <i class="fas fa-sign-in-alt"></i>&nbsp;Login
                             </a>
                             {% endif %}
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">
-                                <span class="fas fa-user-circle fa-2x"></span>
+                            <a class="nav-link" href="" style="display: flex;flex-flow: row;align-items: center;">
+                                <i class="fas fa-user-circle fa-2x"></i>&nbsp;
+                                {% if user.is_authenticated %}
+                                {{ user.get_username }}
+                                {% endif %}
                             </a>
+
                         </li>
                     </ul>
             </div>
@@ -99,13 +112,7 @@
     <!-- MDB core JavaScript -->
     <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.6/js/mdb.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('li[class="nav-item active"]').removeClass('active');
-            $('a[href="' + location.pathname + '"]').closest('li').addClass('active');
-        });
-
-    </script>
+  
     <script src="{% static 'music/main.js' %}"></script>
 </body>
 
