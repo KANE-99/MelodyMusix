@@ -3,7 +3,7 @@
 
 <head>
     <title>
-        {% block title %}Viberr{% endblock %}
+        {% block title %}MelodyMusix{% endblock %}
     </title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,12 +11,12 @@
     {% load staticfiles %}
     <link rel="shortcut icon" href="#">
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css"
+        href="{% static 'music/Bootstrap/bootstrap-4.3.1/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'music/font/fontawesome-free-5.8.1-web/css/all.css' %}">
     <!-- Material Design Bootstrap -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.6/css/mdb.min.css" rel="stylesheet">
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.6/css/mdb.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" href="{% static 'music\mdb\css\mdb.min.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'>
     <!-- My CSS-->
     <link rel="stylesheet" type="text/css" href="{% static 'music/style.css' %}" />
@@ -25,7 +25,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Viberr</a>
+            <a class="navbar-brand" href="{% url 'music:index' %}">MelodyMusix</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavBar"
                 aria-controls="topNavBar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -101,18 +101,15 @@
     {% endblock %}
 
 
-    <script src="https://code.jquery.com/jquery-3.4.0.js"
-        integrity="sha256-DYZMCC8HTC+QDr5QNaIcfR7VSPtcISykd+6eSmBW5qo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    <script src="{% static 'music/jquery.js' %}"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script> -->
+        <script src="{% static 'music\Bootstrap\bootstrap-4.3.1\dist\js\bootstrap.min.js' %}"></script>
     <!-- MDB core JavaScript -->
     <script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.6/js/mdb.min.js"></script>
-  
+        src="{% static 'music\mdb\js\mdb.min.js' %}"></script>
+
     <script src="{% static 'music/main.js' %}"></script>
 </body>
 

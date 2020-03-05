@@ -9,36 +9,37 @@
 </style>
 
 <div class="container" style="margin-top: 30px;">
-        <nav aria-label="Page navigation example">
-            {% if is_paginated %}
-            <ul class="pagination pg-amber justify-content-center" style="background:white;">
-                {% if page_obj.has_previous %}
-                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                </li>
-                {% else %}
-                <li class="page-item disabled"><a class="page-link">Previous</a></li>
-                {% endif %}
-                {% for i in paginator.page_range %}
-                {% if page_obj.number == i %}
-                <li class="page-item active"><a class="page-link"><span>{{ i }} <span
-                                class="sr-only">(current)</span></span></a></li>
-                {% else %}
-                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-                {% endif %}
-                {% endfor %}
-                {% if page_obj.has_next %}
-                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-                {% else %}
-                <li class="page-item disabled"><a class="page-link">Next</a></li>
-                {% endif %}
-            </ul>
+    <nav aria-label="Page navigation example">
+        {% if is_paginated %}
+        <ul class="pagination pg-amber justify-content-center" style="background:white;">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link">Previous</a></li>
             {% endif %}
-        </nav>
-    </div>
+            {% for i in paginator.page_range %}
+            {% if page_obj.number == i %}
+            <li class="page-item active"><a class="page-link"><span>{{ i }} <span
+                            class="sr-only">(current)</span></span></a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link">Next</a></li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </nav>
+</div>
 
 <div class="container album-page">
     {% if 'search' in request.path %}
-    <h2 style="color:white;">Search Result: {{album_list|length}}{% if album_list|length <= 1 %} album{% else %} albums{% endif %} found</h2>
+    <h2 style="color:white;">Search Result: {{album_list|length}}{% if album_list|length <= 1 %} album{% else %}
+        albums{% endif %} found</h2>
     {% endif %}
     <ul>
         <div class="row">
@@ -55,12 +56,10 @@
 
                     <div class="card-body">
                         <h5 class="card-title"><a href="{% url 'music:detail' a.id %}">{{ a.album_title }}</a></h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk
-                            of
-                            the
-                            card's content.</p>
+                        <p class="card-text"><strong>{{ a.artist }} <br> Genre:</strong> {{ a.genre }} <p>{{ a.description }}</p></p>
                         <div style='display: flex;flex-flow:row; justify-content:space-between;'>
-                            <a href="{% url 'music:album-update' a.id %}"><button class="btn btn-success btn-sm"><span class="fa fa-edit"></span></button></a>
+                            <a href="{% url 'music:album-update' a.id %}"><button class="btn btn-success btn-sm"><span
+                                        class="fa fa-edit"></span></button></a>
                             <!-- <form method="post" action="{% url 'music:album-update' a.id %}" style="display: inline">
                                 {% csrf_token %}
                                 <input type="hidden" value="{{ a.id }}">
@@ -75,15 +74,15 @@
                                 <input type="hidden" value="{{ a.id }}">
                                 <button type="submit" class="btn btn-dark btn-sm">
                                     <span class="fa fa-trash">
-    
+
                                     </span>
-    
+
                                 </button>
-    
+
                             </form>
-                            
+
                         </div>
-                        
+
                     </div>
                 </div>
 

@@ -10,6 +10,7 @@ from .forms import CustomUserCreationForm
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+from . import models
 import operator
 from functools import reduce
 
@@ -34,7 +35,7 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     context_object_name = 'album_list'
     paginate_by = 9
     def get_queryset(self):
-        return Album.objects.all()
+        return Album.objects.filter(owned_by=self.request.user.id)
 
 class AlbumSearch(IndexView, LoginRequiredMixin):
     paginate_by = 9
@@ -61,11 +62,20 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
 
 class AlbumCreate(LoginRequiredMixin, CreateView):
     model = Album
-    fields = [ 'album_title', 'artist','genre','album_logo' ]
+    fields = [ 'album_title', 'artist','genre','album_logo','description' ]
+    def post(self,request,*args,**kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            self.object = form.save(commit=False)
+            self.object.owned_by = self.request.user
+            self.object.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 class AlbumUpdate(LoginRequiredMixin, UpdateView):
     model = Album
-    fields = [ 'album_title', 'artist','genre','album_logo' ]
+    fields = [ 'album_title', 'artist','genre','album_logo','description' ]
 
 class AlbumDelete(LoginRequiredMixin, DeleteView):
     model = Album
@@ -73,21 +83,39 @@ class AlbumDelete(LoginRequiredMixin, DeleteView):
 
 class SongCreate(LoginRequiredMixin, CreateView):
     model = Song
-    fields = '__all__'
+    fields = ['album','file_type','song_title','upload']
+    def get_form(self, form_class=None):
+        """Return an instance of the form to be used in this view."""
+        if form_class is None:
+            form_class = self.get_form_class()
+            form = form_class(**self.get_form_kwargs())
+            form.fields['album'].queryset = models.Album.objects.filter(owned_by=self.request.user)
+        return form
+    def post(self,request,*args,**kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            self.object = form.save(commit=False)
+            self.object.owned_by = self.request.user
+            self.object.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 class SongUpdate(LoginRequiredMixin, UpdateView):
     model = Song
-    fields = '__all__'
+    fields = ['album','file_type','song_title','upload']
 
 class SongDelete(LoginRequiredMixin, DeleteView):
     model = Song
-    success_url = reverse_lazy('music:index')   
+    success_url = reverse_lazy('music:song-list')   
 
 class SongList(LoginRequiredMixin, generic.ListView):
     model = Song
     context_object_name = 'song_list'
     template_name = 'music/songlist.html'
     paginate_by = 10
+    def get_queryset(self):
+        return Song.objects.filter(owned_by=self.request.user.id)
 
 class SongSearch(SongList, LoginRequiredMixin):
     paginate_by = 10

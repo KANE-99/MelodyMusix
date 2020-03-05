@@ -32,19 +32,28 @@ function initPlayers() {
     playBtn = document.getElementById('play-or-pause');
     forwardBtn = document.getElementById('forward');
     backwardBtn = document.getElementById('backward');
-
+    if( current_playing_number === 0  ){
+        backwardBtn.disabled = true;
+    }
+    if( current_playing_number === last ){
+        forwardBtn.disabled = true;
+    }
+    
 }
-function initProgressBar() {
+$('#player').on('timeupdate',function() {
     var player = document.getElementById('player');
     let length = player.duration;
     let current_time = player.currentTime;
 
-    var totalLength = calculateTotalValue(length)
-    jQuery(".end-time").html(totalLength);
-
+    var totalLength = calculateTotalValue(length);
+    // console.log(totalLength);
+    if(totalLength){
+        $(".end-time").html(totalLength);
+    }
+    
     // calculate current value time
     var currentTime = calculateCurrentValue(current_time);
-    jQuery(".start-time").html(currentTime);
+    $(".start-time").html(currentTime);
 
     newprogress = (player.currentTime / player.duration) * 100;
     $('#seekObj').attr('aria-valuenow', newprogress).css('width', newprogress + '%');
@@ -53,7 +62,7 @@ function initProgressBar() {
     if (player.currentTime == player.duration) {
         forwardPlay();
     }
-};
+})
 $('.progress').click(
     function (evt) {
         var $this = $(this);
@@ -79,8 +88,6 @@ function togglePlay() {
         isPlaying = false;
         $('#play-or-pause-icon').removeClass().addClass("fas fa-play-circle fa-3x");
 
-
-
     } else {
         if (player.readyState === 0) {
             player.src = songs[current_playing_number].upload;
@@ -94,21 +101,52 @@ function togglePlay() {
 
     }
 }
-var playfunc = function playing() {
-    current_playing_number = this.id;
-    player.src = songs[current_playing_number].upload;
-    player.load();
-    player.play();
-    $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
-    song_title = document.getElementById('song-title');
-    song_title.textContent = this.closest('span').childNodes[3].textContent;
-    if (location.pathname.includes('songs')) {
-        var image = document.getElementById('song-img');
-        image.src = songs[current_playing_number].album_logo;
+function playfunc(id) {
+    
+    current_playing_number = Number(id.id);
+    if(songs[current_playing_number].type.includes('mp3') || songs[current_playing_number].type.includes('mp4')){
+        try {
+            $('.vid')[0].pause();
+            $('.vidi').attr('hidden',true);
+            $('footer').attr('hidden',false);
+        } catch (error) {
+            console.log(error);
+        }        
+        player.src = songs[current_playing_number].upload;        
+        player.load();
+        player.play();
+        $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
+        song_title = document.getElementById('song-title');
+        song_title.textContent = id.closest('span').childNodes[3].textContent;
+        if (location.pathname.includes('songs')) {
+            var image = document.getElementById('song-img');
+            image.src = songs[current_playing_number].album_logo;
+        }
+        if( current_playing_number === 0  ){
+            backwardBtn.disabled = true;
+        }else{
+            backwardBtn.disabled = false;
+        }
+        if( current_playing_number === last ){
+            forwardBtn.disabled = true;
+        }else{
+            forwardBtn.disabled = false;
+        }
+    }else{
+        player.pause();
+        $("html, body").animate({ scrollTop: $('.vidi').offset().top }, "slow");
+        $('footer').attr('hidden',true);
+        try{
+            $('.vidi').attr('hidden',false);
+            $('.vid').attr('src', songs[current_playing_number].upload);
+            $('.vid')[0].play();
+        }catch(error){
+            console.log(error);
+        }
+        
     }
-
+    
 }
-$("span button").click(playfunc);
 function backwardPlay() {
 
     if (current_playing_number > 0) {
@@ -121,37 +159,39 @@ function backwardPlay() {
 
         }
         player = document.getElementById('player');
-        if (location.pathname.includes('songs')) {
+        // if (location.pathname.includes('songs')) {
             player.src = songs[current_playing_number].upload;
             player.load();
             player.play();
             $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
             song_title = document.getElementById('song-title');
             song_title.textContent = songs[current_playing_number].title;
-            var image = document.getElementById('song-img');
-            image.src = songs[current_playing_number].album_logo;
+            if (location.pathname.includes('songs')) {
+                var image = document.getElementById('song-img');
+                image.src = songs[current_playing_number].album_logo;
+            }
 
-        } else {
-            var parent = document.getElementById("audio-player");
-            var child = document.getElementById('player');
-            child.pause();
-            child.currentTime = 0;
-            var player = document.createElement('audio');
-            player.id = 'player';
-            player.src = songs[current_playing_number].upload;
-            player.type = 'audio/mpeg';
-            player.preload = 'auto';
-            player.ontimeupdate = function () { initProgressBar(); };
-            parent.removeChild(child);
-            parent.appendChild(player);
-            player.load();
-            player.onloadeddata = function () {
-                player.play();
-                $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
-            };
-            song_title = document.getElementById('song-title');
-            song_title.textContent = songs[current_playing_number].title;
-        }
+        // } else {
+            // var parent = document.getElementById("audio-player");
+            // var child = document.getElementById('player');
+            // child.pause();
+            // child.currentTime = 0;
+            // var player = document.createElement('audio');
+            // player.id = 'player';
+            // player.src = songs[current_playing_number].upload;
+            // player.type = 'audio/mpeg';
+            // player.preload = 'auto';
+            // player.ontimeupdate = function () { initProgressBar(); };
+            // parent.removeChild(child);
+            // parent.appendChild(player);
+            // player.load();
+            // player.onloadeddata = function () {
+            //     player.play();
+            //     $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
+            // };
+            // song_title = document.getElementById('song-title');
+            // song_title.textContent = songs[current_playing_number].title;    
+        // }
     } else {
         player.currentTime = 0;
         $('#seekObj').attr('aria-valuenow', 0).css('width', 0 + '%');
@@ -163,6 +203,7 @@ function forwardPlay() {
 
     if (current_playing_number < last) {
         current_playing_number += 1;
+        console.log(current_playing_number);
         if (songs[current_playing_number - 1]) {
             backwardBtn.disabled = false;
         }
@@ -170,44 +211,47 @@ function forwardPlay() {
             forwardBtn.disabled = true;
         }
         player = document.getElementById('player');
-        if (location.pathname.includes('songs')) {
+        // if (location.pathname.includes('songs')) {
             player.src = songs[current_playing_number].upload;
             player.load();
             player.play();
             $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
             song_title = document.getElementById('song-title');
             song_title.textContent = songs[current_playing_number].title;
-            var image = document.getElementById('song-img');
-            image.src = songs[current_playing_number].album_logo;
-
-        } else {
-            var parent = document.getElementById("audio-player");
-            var child = document.getElementById('player');
-            child.pause();
-            child.currentTime = 0;
-            var player = document.createElement('audio');
-            player.id = 'player';
-            player.src = songs[current_playing_number].upload;
-            song_title = document.getElementById('song-title');
-            song_title.textContent = songs[current_playing_number].title;
-            player.type = 'audio/mpeg';
-            player.preload = 'auto';
-            player.ontimeupdate = function () { initProgressBar(); };
-            parent.removeChild(child);
-            parent.appendChild(player);
-            // player.pause();
-            // player.setAttribute('src', songs[current_playing_number].upload);
-            player.load();
-            player.onloadeddata = function () {
-                player.play();
-                $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
+            if (location.pathname.includes('songs')) {
+                var image = document.getElementById('song-img');
+                image.src = songs[current_playing_number].album_logo;
             }
-        }
+
+        // } else {
+            // var parent = document.getElementById("audio-player");
+            // var child = document.getElementById('player');
+            // child.pause();
+            // child.currentTime = 0;
+            // var player = document.createElement('audio');
+            // player.id = 'player';
+            // player.src = songs[current_playing_number].upload;
+            // song_title = document.getElementById('song-title');
+            // song_title.textContent = songs[current_playing_number].title;
+            // player.type = 'audio/mpeg';
+            // player.preload = 'auto';
+            // player.ontimeupdate = function () { initProgressBar(); };
+            // parent.removeChild(child);
+            // parent.appendChild(player);
+            // // player.pause();
+            // // player.setAttribute('src', songs[current_playing_number].upload);
+            // player.load();
+            // player.onloadeddata = function () {
+            //     player.play();
+            //     $('#play-or-pause-icon').removeClass().addClass("fas fa-pause-circle fa-3x");
+            // }
+        // }
     } else {
         player.currentTime = 0;
         $('#seekObj').attr('aria-valuenow', 0).css('width', 0 + '%');
     }
 }
 
-
-initPlayers();
+if( !location.pathname.endsWith('music/')){
+    initPlayers();
+}
